@@ -340,6 +340,13 @@ INTERNAL_IPS = (
     '::1',
 )
 
+# Settings outside of the scope of the above, additional module settings, etc.
+# CAUTION: This unconditionally sets variables from the passthrough dictionary
+# in the settings module and could lead to odd results.
+passthrough_settings = getattr(configuration, 'PASSTHROUGH', {})
+settings_module = sys.modules[__name__]
+for key, value in passthrough_settings.items():
+    setattr(settings_module, key, value)
 
 try:
     HOSTNAME = socket.gethostname()
