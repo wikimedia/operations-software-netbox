@@ -2,6 +2,7 @@ import logging
 import os
 import platform
 import socket
+import sys
 import warnings
 
 from django.contrib.messages import constants as messages
