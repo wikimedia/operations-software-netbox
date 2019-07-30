@@ -4,6 +4,7 @@ import os
 import platform
 import re
 import socket
+import sys
 import warnings
 from urllib.parse import urlsplit
 
