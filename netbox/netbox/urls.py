@@ -20,7 +20,7 @@ openapi_info = openapi.Info(
 schema_view = get_schema_view(
     openapi_info,
     validators=['flex', 'ssv'],
-    public=True,
+    public=False,
 )
 
 _patterns = [
