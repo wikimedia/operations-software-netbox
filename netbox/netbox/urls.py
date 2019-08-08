@@ -19,7 +19,7 @@ schema_view = get_schema_view(
         license=openapi.License(name="Apache v2 License"),
     ),
     validators=['flex', 'ssv'],
-    public=True,
+    public=False,
 )
 
 _patterns = [
