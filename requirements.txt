@@ -22,3 +22,4 @@ pycryptodome==3.10.1
 PyYAML==5.4.1
 svgwrite==1.4.1
 tablib==3.0.0
+django-cas-ng==4.2.0

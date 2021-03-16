@@ -77,6 +77,7 @@ BASE_PATH = getattr(configuration, 'BASE_PATH', '')
 if BASE_PATH:
     BASE_PATH = BASE_PATH.strip('/') + '/'  # Enforce trailing slash only
 CACHE_TIMEOUT = getattr(configuration, 'CACHE_TIMEOUT', 0)
+CAS_ENABLED = getattr(configuration, 'CAS_ENABLED', False)
 CHANGELOG_RETENTION = getattr(configuration, 'CHANGELOG_RETENTION', 90)
 CORS_ORIGIN_ALLOW_ALL = getattr(configuration, 'CORS_ORIGIN_ALLOW_ALL', False)
 CORS_ORIGIN_REGEX_WHITELIST = getattr(configuration, 'CORS_ORIGIN_REGEX_WHITELIST', [])
@@ -356,6 +357,35 @@ AUTHENTICATION_BACKENDS = [
     REMOTE_AUTH_BACKEND,
     'netbox.authentication.ObjectPermissionBackend',
 ]
+
+# CAS authentication things
+if CAS_ENABLED:
+    CAS_SERVER_URL = None
+    CAS_GROUP_REQUIRED = None
+    CAS_GROUP_MAPPING = {}
+    CAS_GROUP_ATTRIBUTE_MAPPING = {}
+
+    INSTALLED_APPS.append('django_cas_ng')
+    AUTHENTICATION_BACKENDS.append('netbox.cas_authentication.CASGroupBackend')
+
+    try:
+        from netbox import cas_configuration
+    except ModuleNotFoundError as e:
+        if getattr(e, 'name') == 'cas_configuration':
+            raise ImproperlyConfigured(
+                "CAS configuration file not found: Check that cas_configuration.py has been created alongside "
+                "configuration.py."
+            )
+        raise e
+
+    for param in dir(cas_configuration):
+        if param.startswith('CAS_'):
+            setattr(sys.modules[__name__], param, getattr(cas_configuration, param))
+    if CAS_SERVER_URL is None:
+        raise ImproperlyConfigured(
+            "CAS configuration incomplete, and requires at least CAS_SERVER_URL be set in cas_configuration.py."
+        )
+
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
