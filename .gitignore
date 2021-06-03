@@ -1,5 +1,6 @@
 *.pyc
 *.swp
+/netbox/netbox/cas_configuration.py
 /netbox/netbox/configuration.py
 /netbox/netbox/ldap_config.py
 /netbox/project-static/.cache
