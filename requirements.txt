@@ -28,3 +28,5 @@ tablib==3.1.0
 
 # Workaround for #7401
 jsonschema==3.2.0
+pycryptodome==3.9.9
+django-cas-ng==4.2.0

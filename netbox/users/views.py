@@ -1,5 +1,6 @@
 import logging
 
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout, update_session_auth_hash
@@ -13,6 +14,9 @@ from django.utils.decorators import method_decorator
 from django.utils.http import is_safe_url
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View
+
+if settings.CAS_ENABLED:
+    from django_cas_ng import views as cas_views
 
 from utilities.forms import ConfirmationForm
 from .forms import LoginForm, PasswordChangeForm, TokenForm
@@ -31,6 +35,8 @@ class LoginView(View):
 
     @method_decorator(sensitive_post_parameters('password'))
     def dispatch(self, *args, **kwargs):
+        if settings.CAS_ENABLED:
+            return cas_views.LoginView().dispatch(*args, **kwargs)
         return super().dispatch(*args, **kwargs)
 
     def get(self, request):
@@ -89,6 +95,10 @@ class LogoutView(View):
     """
     Deauthenticate a web user.
     """
+    def dispatch(self, *args, **kwargs):
+        if settings.CAS_ENABLED:
+            return cas_views.LogoutView().dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs)
 
     def get(self, request):
         logger = logging.getLogger('netbox.auth.logout')
