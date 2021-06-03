@@ -37,3 +37,7 @@ jsonschema==3.2.0
 
 # Workaround for #9986
 pytz==2022.1
+
+# WMF for CAS support
+pycryptodome==3.9.9
+django-cas-ng==4.2.0
