@@ -1,6 +1,5 @@
 import logging
 
-from django_cas_ng import views as cas_views
 
 from django.conf import settings
 from django.contrib import messages
@@ -15,6 +14,9 @@ from django.utils.decorators import method_decorator
 from django.utils.http import is_safe_url
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View
+
+if settings.CAS_ENABLED:
+    from django_cas_ng import views as cas_views
 
 from secrets.forms import UserKeyForm
 from secrets.models import SessionKey, UserKey
