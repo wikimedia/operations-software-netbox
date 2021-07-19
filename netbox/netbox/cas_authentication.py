@@ -53,10 +53,12 @@ class CASGroupBackend(CASBackend):
                     except Group.DoesNotExist:
                         logger.error((f"Could not assign mapped group {group}->{netbox_group} to "
                                       f"CAS user {user_obj}: Group not found"))
-                user_obj.groups.clear()
-                if groups:
-                    user_obj.groups.add(*groups)
-                    logger.debug(f"Assigned groups to CAS user {user_obj}: {groups}")
+
+        user_obj.groups.clear()
+        logger.debug(f"Cleared existing groups for CAS user {user_obj}")
+        if groups:
+            user_obj.groups.add(*groups)
+            logger.debug(f"Assigned groups to CAS user {user_obj}: {groups}")
 
         # assign user flags based on which groups appear on the user
         usergroups = [group.name for group in user_obj.groups.all()]
