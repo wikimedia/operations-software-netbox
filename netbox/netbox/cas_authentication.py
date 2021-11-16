@@ -11,6 +11,13 @@ logger = logging.getLogger('netbox.cas_authentication')
 
 
 class CASGroupBackend(CASBackend):
+
+    def user_can_authenticate(self, user):
+        """Allow all users to try the CAS authentication."""
+        # Needed in particular for users that tried to login before being authorized, for which there is already a user
+        # record with active=False.
+        return True
+
     def authenticate(self, request, ticket, service):
         """Hook authentication so that we can manipulate attributes and groups."""
         user = super().authenticate(request, ticket, service)
